@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Jana surat berhenti kerja dengan hanya beberapa langkah. Cepat & Senang, 3 saat dah settle!">
+    <title>Surat Berhenti Kerja Generator by Maukerja</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="ph-fill ph-briefcase"></i>
+                <div class="logo-text">
+                    <span class="logo-main">Surat Berhenti Kerja</span>
+                    <span class="logo-sub">by Maukerja</span>
+                </div>
+            </div>
+            <nav>
+                <!-- Omitted top navigation items as requested -->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+        <div class="blob-bg blob-1"></div>
+        <div class="blob-bg blob-2"></div>
+        
+        <div class="container hero-container">
+            <div class="hero-content">
+                <span class="eyebrow">Mudah & Percuma</span>
+                <h1>Jana Surat Berhenti Kerja Dalam <span class="text-primary">5 Saat</span></h1>
+                <p>Tak perlu pening fikir ayat! Guna sahaja teknologi AI kami untuk hasilkan surat berhenti kerja yang kemas dan rasmi.</p>
+                <div class="hero-actions">
+                    <a href="#generator" class="btn-primary" onclick="document.getElementById('name').focus(); return false;">Jana Surat Di Sini <i class="ph ph-arrow-right"></i></a>
+                </div>
+            </div>
+            
+            <div class="hero-image">
+                <div class="img-wrapper">
+                    <img src="assets/hero-flowy.png" alt="Profesional sedang bekerja dengan selesa menggunakan komputer riba">
+                    <div class="floating-badge badge-top">
+                        <i class="ph-fill ph-check-circle"></i> Sedia Digunakan
+                    </div>
+                    <div class="floating-badge badge-bottom">
+                        <i class="ph-fill ph-file-text"></i> 100% Percuma
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Generator Section -->
+    <section id="generator" class="generator-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Penjana <span class="text-primary">Surat Berhenti Kerja</span></h2>
+                <p id="genSubtext">Lengkapkan butiran di bawah untuk menjana surat berhenti kerja rasmi secara automatik.</p>
+            </div>
+
+            <div class="generator-layout">
+                <div class="form-section">
+                    <form id="letterForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label id="labelName" for="name">NAMA PENUH ANDA</label>
+                                <input type="text" id="name" placeholder="Contoh: Amir Bin Ahmad" required>
+                            </div>
+                            <div class="form-group">
+                                <label id="labelPosition" for="position">JAWATAN ANDA</label>
+                                <input type="text" id="position" placeholder="Contoh: Marketing Executive" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label id="labelCompany" for="company">NAMA SYARIKAT</label>
+                            <input type="text" id="company" placeholder="Contoh: ABC Sdn Bhd" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label id="labelRecipient" for="recipient">NAMA PENERIMA (PENGURUS/HR)</label>
+                            <input type="text" id="recipient" placeholder="Contoh: Encik Ali" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label id="labelDate" for="date">TARIKH SURAT</label>
+                                <input type="date" id="date" required>
+                            </div>
+                            <div class="form-group">
+                                <label id="labelNotice" for="notice">TEMPOH NOTIS</label>
+                                <select id="notice" required>
+                                    <option id="optNotice0" value="0">24 Jam</option>
+                                    <option id="optNotice1" value="1" selected>1 Bulan</option>
+                                    <option id="optNotice2" value="2">2 Bulan</option>
+                                    <option id="optNoticeCustom" value="custom">Custom (Isi Sendiri)</option>
+                                </select>
+                                <div id="customNoticeGroup" style="display: none; margin-top: 0.8rem; animation: fadeInUp 0.3s ease-out;">
+                                    <input type="text" id="customNotice" placeholder="Contoh: 45 hari, 6 minggu">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Auto-calculate result display -->
+                        <div class="form-group info-box" id="endDateDisplayGroup">
+                            <label id="labelEndDate">HARI TERAKHIR BEKERJA (DIKIRA):</label>
+                            <div class="info-content">
+                                <i class="ph ph-calendar"></i>
+                                <span id="autoEndDate">Pilih tarikh & notis...</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label id="labelReason" for="reasonSelect">SEBAB BERHENTI (PILIHAN)</label>
+                            <select id="reasonSelect">
+                                <option id="optReasonNone" value="">-- Pilih Sebab (Jika Ada) --</option>
+                                <option id="optReasonBetter" value="peluang kerjaya yang lebih baik">Peluang kerjaya yang lebih baik</option>
+                                <option id="optReasonHealth" value="masalah kesihatan">Masalah kesihatan</option>
+                                <option id="optReasonFamily" value="urusan keluarga">Urusan keluarga</option>
+                                <option id="optReasonStudy" value="melanjutkan pelajaran">Melanjutkan pelajaran</option>
+                                <option id="optReasonCustom" value="custom">Lain-lain (Nyatakan sendiri)</option>
+                            </select>
+                            <div id="customReasonGroup" style="display: none; margin-top: 0.8rem;">
+                                <input type="text" id="reason" placeholder="Cth: Ingin mencuba bidang baru...">
+                            </div>
+                        </div>
+
+                        <!-- E-Sign Optional Section -->
+                        <div class="form-group esign-section">
+                            <label id="labelEsign" class="checkbox-label">
+                                <input type="checkbox" id="enableEsign">
+                                <span id="textEsign">Tambah Tandatangan Digital (Pilihan)</span>
+                            </label>
+                            
+                            <div id="esignModule" style="display: none; margin-top: 1rem;">
+                                <div class="esign-tabs">
+                                    <button id="btnTabDraw" type="button" class="esign-tab-btn active" data-tab="draw">Lukis</button>
+                                    <button id="btnTabUpload" type="button" class="esign-tab-btn" data-tab="upload">Muat Naik</button>
+                                </div>
+                                
+                                <div id="drawTab" class="esign-tab-content">
+                                    <canvas id="sigCanvas"></canvas>
+                                    <button id="btnClearSig" type="button" class="clear-btn">Padam & Lukis Semula</button>
+                                </div>
+                                
+                                <div id="uploadTab" class="esign-tab-content" style="display: none;">
+                                    <input type="file" id="sigUpload" accept="image/*">
+                                    <p id="helpSigUpload" class="help-text">Sila muat naik fail PNG telus untuk hasil terbaik.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label id="labelLang">BAHASA SURAT</label>
+                            <div class="toggle-group" id="languageGroup">
+                                <button type="button" class="toggle-btn active" data-value="bm">Bahasa Malaysia</button>
+                                <button type="button" class="toggle-btn" data-value="en">English</button>
+                            </div>
+                            <input type="hidden" id="language" value="bm">
+                        </div>
+
+                        <button type="submit" class="submit-btn" id="janaBtn">JANA SEKARANG</button>
+                    </form>
+                </div>
+
+                <div class="preview-section" id="previewContainer">
+                    <div class="paper-preview" id="letterOutput">
+                        <p class="placeholder-text">Sila isi borang di sebelah, kemudian klik "Jana Sekarang" untuk melihat templat surat berhenti kerja anda di sini.</p>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button type="button" class="action-btn" id="copyBtn">
+                            <i class="ph ph-copy"></i> Salin Surat
+                        </button>
+                        <button type="button" class="action-btn primary-btn" id="downloadPdf">
+                            <i class="ph ph-file-pdf"></i> Muat Turun PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guide Section -->
+    <section class="guide-section" id="guide">
+        <div class="container">
+            <div class="section-title">
+                <h2>3 Langkah Mudah Jana <span class="text-primary">Surat Berhenti Kerja</span></h2>
+                <p>Ikuti 3 langkah mudah ini untuk membina surat yang profesional.</p>
+            </div>
+            
+            <div class="guide-grid">
+                <div class="guide-card">
+                    <div class="card-illustration">
+                        <i class="ph ph-user-list"></i>
+                    </div>
+                    <div class="step-badge">1</div>
+                    <h3>Isi Maklumat Asas</h3>
+                    <p>Lengkapkan nama penuh, jawatan, syarikat, tarikh dan notis berhenti kerja. Butiran ini penting untuk memastikan surat anda rasmi dan teratur.</p>
+                </div>
+                
+                <div class="guide-card">
+                    <div class="card-illustration">
+                        <i class="ph ph-magic-wand"></i>
+                    </div>
+                    <div class="step-badge">2</div>
+                    <h3>Customize Surat</h3>
+                    <p>Pilih sama ada anda ingin memasukkan sebab berhenti kerja dan boleh menukar bahasa surat (BM atau English) mengikut kesesuaian dan keperluan anda.</p>
+                </div>
+                
+                <div class="guide-card">
+                    <div class="card-illustration">
+                        <i class="ph ph-copy"></i>
+                    </div>
+                    <div class="step-badge">3</div>
+                    <h3>Jana & Gunakan Surat</h3>
+                    <p>Tekan "Jana Sekarang", semak preview pada kotak di sebelah, kemudian klik "Salin Surat". Paste pada dokumen perisian (Word) atau lampiran email anda!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Kenapa Guna Website <span class="text-primary">Ini?</span></h2>
+                <p>Dicipta untuk memudahkan urusan pekerja, kami tawarkan nilai terbaik untuk anda.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="ph-fill ph-check-circle"></i> Percuma sepenuhnya
+                </div>
+                <div class="feature-item">
+                    <i class="ph-fill ph-check-circle"></i> Dalam BM & Inggeris
+                </div>
+                <div class="feature-item">
+                    <i class="ph-fill ph-check-circle"></i> Siap dalam masa 5 saat sahaja
+                </div>
+                <div class="feature-item">
+                    <i class="ph-fill ph-check-circle"></i> Sesuai semua industri
+                </div>
+                <div class="feature-item">
+                    <i class="ph-fill ph-check-circle"></i> Tak perlu daftar akaun
+                </div>
+                <div class="feature-item">
+                    <i class="ph-fill ph-check-circle"></i> Tiada pangkalan data disimpan
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" id="faq">
+        <div class="container">
+            <div class="section-title">
+                <h2>Soalan Lazim <span class="text-primary">Pengguna</span></h2>
+                <p>Segala persoalan mengenai proses berhenti kerja terjawab di sini.</p>
+            </div>
+
+            <div class="faq-container">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Berapa lama notis berhenti kerja yang saya kena bagi?</span>
+                        <i class="ph ph-caret-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Tempoh notis berhenti kerja anda bergantung kepada apa yang tertulis dalam kontrak perkhidmatan anda. Jika kontrak tidak menyatakan tempoh notis, anda perlu mengikut tempoh minimum yang ditetapkan di bawah Akta Kerja 1955 berdasarkan tempoh anda telah bekerja.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Adakah saya wajib nyatakan sebab berhenti kerja?</span>
+                        <i class="ph ph-caret-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Secara undang-undang di bawah Akta Kerja 1955, anda tidak wajib menyatakan sebab berhenti kerja dalam surat rasmi. Berhenti kerja adalah hak anda sebagai pekerja asalkan anda mematuhi tempoh notis yang ditetapkan dalam kontrak.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Boleh ke edit surat selepas jana?</span>
+                        <i class="ph ph-caret-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Ya. Salin teks ke Microsoft Word, Google Docs, atau mana-mana editor dan edit mengikut keperluan anda sebelum menghantarnya.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Surat ini sah secara undang-undang?</span>
+                        <i class="ph ph-caret-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Surat yang dijana adalah template profesional yang standard. Untuk keperluan undang-undang khusus, sila dapatkan nasihat daripada peguam atau pakar buruh yang berkelayakan.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Adakah maklumat saya disimpan?</span>
+                        <i class="ph ph-caret-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Tidak. Semua maklumat yang anda masukkan hanya diproses pada masa jana dan tidak disimpan dalam sebarang pangkalan data.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="container footer-content">
+            <div class="footer-cta">
+                <h2 id="footerHeadline">
+                    <span class="cta-subtitle">Jangan buang masa fikir ayat.</span><br>
+                    <span class="cta-title">Jana surat profesional anda dalam sekelip mata.</span>
+                </h2>
+                <a href="#generator" class="btn-primary">Jana Surat Sekarang</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Surat Berhenti Kerja | Dicipta oleh Maukerja</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

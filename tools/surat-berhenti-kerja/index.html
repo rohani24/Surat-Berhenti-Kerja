@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Jana surat berhenti kerja dengan hanya beberapa langkah. Cepat & Senang, 3 saat dah settle!">
+    <title>Surat Berhenti Kerja Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="ph-fill ph-briefcase"></i>
+                <div class="logo-text">
+                    <span class="logo-main">Tools Kerja</span>
+                    <span class="logo-sub">by Maukerja</span>
+                </div>
+            </div>
+            <nav>
+                <a href="../../index.html">Utama</a>
+                <a href="../../index.html#tools">Tools</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="hero">
+        <h1 class="main-title">Surat Berhenti Kerja Generator</h1>
+        <p class="subtitle">Isi sahaja detail, 5 saat terus siap. Senang, cepat, no stress!</p>
+    </div>
+
+    <main class="container">
+        <section class="form-section">
+            <div class="tagline">✦ GENERATOR</div>
+            <h2 class="section-title">Jana Surat Anda Di Sini</h2>
+
+            <form id="letterForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">NAMA PENUH ANDA</label>
+                        <input type="text" id="name" placeholder="Contoh: Siti" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="position">JAWATAN ANDA</label>
+                        <input type="text" id="position" placeholder="Contoh: Marketing Executive" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="company">NAMA SYARIKAT</label>
+                    <input type="text" id="company" placeholder="Contoh: ABC Sdn Bhd" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="recipient">NAMA PENERIMA (PENGURUS/HR)</label>
+                    <input type="text" id="recipient" placeholder="Contoh: Encik Ali" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date">TARIKH SURAT</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="notice">TEMPOH NOTIS</label>
+                        <select id="notice" required>
+                            <option value="1">1 Bulan</option>
+                            <option value="2">2 Bulan</option>
+                            <option value="0">24 Jam</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="reason">SEBAB BERHENTI (PILIHAN)</label>
+                    <input type="text" id="reason" placeholder="Cth: Mengejar peluang baru, hal peribadi...">
+                </div>
+
+                <div class="form-group">
+                    <label>TANDATANGAN</label>
+                    <div class="radio-group" style="display: flex; gap: 1rem; margin-top: 0.5rem; flex-direction: column;">
+                        <label style="text-transform: none; letter-spacing: normal; font-size: 0.95rem; color: var(--text-primary); display: flex; align-items: center; justify-content: flex-start; gap: 10px; cursor: pointer;">
+                            <input type="radio" name="auto_signature" value="yes" id="sigYes" style="width: auto; margin: 0;">
+                            Ya, jana tandatangan automatik
+                        </label>
+                        <label style="text-transform: none; letter-spacing: normal; font-size: 0.95rem; color: var(--text-primary); display: flex; align-items: center; justify-content: flex-start; gap: 10px; cursor: pointer;">
+                            <input type="radio" name="auto_signature" value="no" id="sigNo" checked style="width: auto; margin: 0;">
+                            Tidak perlu tandatangan
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="signatureNameGroup" style="display: none; animation: fadeInDown 0.3s ease-out;">
+                    <label for="signatureName">NAMA UNTUK TANDATANGAN</label>
+                    <input type="text" id="signatureName" placeholder="Contoh: Siti">
+                </div>
+
+                <div class="form-group">
+                    <label>BAHASA SURAT</label>
+                    <div class="toggle-group" id="languageGroup">
+                        <button type="button" class="toggle-btn active" data-value="bm">Bahasa Malaysia</button>
+                        <button type="button" class="toggle-btn" data-value="en">English</button>
+                    </div>
+                    <input type="hidden" id="language" value="bm">
+                </div>
+
+                <button type="submit" class="submit-btn" id="janaBtn">Jana Sekarang</button>
+            </form>
+        </section>
+
+        <section class="preview-section" id="previewContainer">
+            <div class="paper-preview" id="letterOutput">
+                <p class="placeholder-text">Sila isi borang di sebelah, kemudian klik "Jana Sekarang" untuk melihat templat surat berhenti kerja anda di sini.</p>
+            </div>
+            
+            <div class="action-buttons">
+                <button type="button" class="action-btn secondary-btn" id="copyBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Salin Surat
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Guide Section -->
+    <section class="guide-section" id="guide">
+        <div class="guide-container">
+            <div class="guide-header">
+                <h2>Step by Step Cara Guna Surat Berhenti Kerja Generator</h2>
+                <p>Ikuti 3 langkah mudah ini untuk membina surat yang profesional.</p>
+            </div>
+            
+            <div class="guide-grid">
+                <!-- Step 1 -->
+                <div class="guide-card">
+                    <div class="step-num">1</div>
+                    <h3>Isi Maklumat Asas</h3>
+                    <p>Lengkapkan nama penuh, jawatan, syarikat, tarikh dan notis berhenti kerja. Butiran ini penting untuk memastikan surat anda rasmi dan teratur.</p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="guide-card">
+                    <div class="step-num">2</div>
+                    <h3>Customize Surat</h3>
+                    <p>Pilih sama ada ingin memasukkan sebab berhenti, menjana tandatangan auto, dan menukar bahasa surat (BM atau English) mengikut kesesuaian dan keperluan anda.</p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="guide-card">
+                    <div class="step-num">3</div>
+                    <h3>Jana & Gunakan Surat</h3>
+                    <p>Tekan "Jana Sekarang", semak pratonton pada kotak di sebelah, kemudian klik "Salin Surat". Tampal pada dokumen perisian (Word) atau lampiran email anda!</p>
+                </div>
+            </div>
+
+            <div class="guide-cta">
+                <a href="#" onclick="window.scrollTo({top:0, behavior:'smooth'}); return false;" class="btn-cta">Cuba Sekarang – Jana Surat Anda</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="footer-bottom">
+            <p>&copy; 2026 Tools Kerja | Dicipta oleh Maukerja</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
