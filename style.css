@@ -437,7 +437,6 @@ input:focus, select:focus {
     line-height: 1.7;
     margin-bottom: 2rem;
     flex-grow: 1;
-    white-space: pre-wrap;
     font-size: 0.95rem;
     position: relative;
 }
@@ -926,80 +925,51 @@ footer {
 
 /* --- PRINT STYLES --- */
 @media print {
-    /* Hide everything except the letter content */
-    header, 
-    .hero-section, 
-    .form-section,
-    .section-title,
-    .guide-section,
-    .features-section,
-    .faq-section,
-    #footer,
-    #genSubtext,
-    .action-buttons,
-    .esign-section-title,
-    .esign-btn-group,
-    .esign-tabs,
-    .esign-tab-content,
-    .esign-help-text,
-    .checkbox-label,
-    .submit-btn,
-    .language-toggle {
+    /* Remove default browser headers and footers */
+    @page {
+        margin: 0;
+    }
+
+    /* Hide everything except the print buffer */
+    body > *:not(#printBuffer) {
         display: none !important;
     }
 
-    body {
+    /* Reset body and html for full-page printing */
+    body, html {
         background: #fff !important;
         margin: 0 !important;
         padding: 0 !important;
-    }
-
-    .container {
-        max-width: 100% !important;
         width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
+        height: auto !important;
     }
 
-    .generator-section {
-        padding: 0 !important;
-        margin: 0 !important;
-        background: transparent !important;
-    }
-
-    .generator-layout {
+    /* Show and style the print buffer */
+    #printBuffer {
         display: block !important;
-        box-shadow: none !important;
-        border: none !important;
-    }
-
-    .preview-section {
         width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        background: transparent !important;
-    }
-
-    .paper-preview {
-        box-shadow: none !important;
-        border: none !important;
-        padding: 0 !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        white-space: pre-wrap !important;
-        font-size: 11pt !important;
+        height: auto !important;
+        padding: 2cm !important; /* Standard A4 professional margins */
+        background: #fff !important;
         color: #000 !important;
-        background: transparent !important;
+        font-family: 'Outfit', sans-serif !important;
     }
 
-    /* Remove the red bar during print */
-    .paper-preview::before {
-        display: none !important;
+    /* Clean letter-specific styles inside the buffer */
+    .letter-content {
+        color: #000 !important;
+        font-size: 11pt !important;
+        line-height: 1.6 !important;
+        white-space: normal !important;
+        display: block !important;
     }
 
-    /* Ensure specific styling for professional look */
-    .paper-preview b {
-        font-weight: 700 !important;
+    .letter-content p {
+        margin-bottom: 0.8rem !important;
+    }
+
+    .signature-block {
+        margin-top: 1.5rem !important;
     }
 
     .signature-img {
@@ -1008,15 +978,229 @@ footer {
         display: block !important;
         margin-top: 10px !important;
     }
+
+    /* Ensure paper-like look is removed for actual printers */
+    .paper-preview {
+        padding: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        width: 100% !important;
+        background: transparent !important;
+    }
 }
 
-/* --- SUPPRESS BROWSER PRINT HEADERS/FOOTERS --- */
-@media print {
-    @page {
-        margin: 0; /* Removes default header (date/title) and footer (URL/page info) */
-    }
-    
-    body {
-        margin: 1.5cm !important; /* Adds margin back to the content so it's not at the very edge */
-    }
+/* New Fields Styling */
+textarea {
+    width: 100%;
+    padding: 1.2rem;
+    background-color: var(--bg-white);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    color: var(--text-color);
+    font-size: 1rem;
+    font-weight: 500;
+    resize: none;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--bg-white);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4);
+}
+
+/* Resume Upload Section */
+.resume-upload-zone {
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+    border-radius: var(--radius-md);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.resume-upload-zone:hover, .resume-upload-zone.dragover {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-color: white;
+}
+
+.resume-upload-zone i.ph-clip-light {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+}
+
+.upload-text {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.upload-text b {
+    text-decoration: underline;
+}
+
+.resume-helper {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
+.resume-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.resume-note i {
+    font-size: 1rem;
+}
+
+.file-status {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-white);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    gap: 0.5rem;
+    z-index: 5;
+    animation: fadeInUp 0.3s ease;
+}
+
+.file-status i {
+    font-size: 3rem;
+    color: var(--primary-color);
+}
+
+.file-status span {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.remove-file-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--bg-highlight);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--primary-color);
+    transition: all 0.2s;
+}
+
+.remove-file-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.error-msg {
+    color: #ffdce0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* Disabled Button State */
+.submit-btn:disabled {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: rgba(255, 255, 255, 0.5);
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* --- VALIDATION FEEDBACK & TOASTS --- */
+.toast-container {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast {
+    background-color: #333;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    font-weight: 600;
+    font-size: 0.95rem;
+    pointer-events: auto;
+    animation: toastIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-left: 5px solid var(--primary-color);
+}
+
+.toast i {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateY(100%); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toastOut {
+    to { opacity: 0; transform: translateY(20px) scale(0.9); }
+}
+
+/* Invalid Input Highlighting */
+input.invalid, textarea.invalid, select.invalid {
+    border: 2px solid #ee3c4d !important;
+    background-color: #fff1f2 !important;
+    box-shadow: 0 0 0 4px rgba(238, 60, 77, 0.2) !important;
+    animation: shake 0.4s ease-in-out;
+}
+
+.resume-upload-zone.invalid {
+    border-color: #ffb3b3 !important;
+    background-color: rgba(255, 0, 0, 0.05) !important;
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.error-text {
+    color: #ffb3b3;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    display: block;
+    animation: fadeInUp 0.3s ease;
 }

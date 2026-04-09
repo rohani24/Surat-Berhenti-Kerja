@@ -18,23 +18,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyBtn = document.getElementById('copyBtn');
     const downloadPdfBtn = document.getElementById('downloadPdf');
 
+    const phoneInput = document.getElementById('phone');
+    const emailInput = document.getElementById('email');
+    
     // E-Sign Elements
     const enableEsignCheckbox = document.getElementById('enableEsign');
     const esignModule = document.getElementById('esignModule');
     const esignTabBtns = document.querySelectorAll('.esign-tab-btn');
     const esignTabs = document.querySelectorAll('.esign-tab-content');
     const canvas = document.getElementById('sigCanvas');
-    const clearBtn = document.getElementById('clearSig');
+    const clearBtn = document.getElementById('btnClearSig');
     const sigUpload = document.getElementById('sigUpload');
+    
+    // Resume Elements
+    const resumeDropzone = document.getElementById('resumeDropzone');
+    const resumeFile = document.getElementById('resumeFile');
+    const fileUploadStatus = document.getElementById('fileUploadStatus');
+    const fileNameDisplay = document.getElementById('fileName');
+    const removeFileBtn = document.getElementById('removeFile');
+    const resumeError = document.getElementById('resumeError');
+    const janaBtn = document.getElementById('janaBtn');
 
     const faqQuestions = document.querySelectorAll('.faq-question');
 
     let signatureImage = null;
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzqqsY-S8OIzAN9xUaBOqbrL93PDPbAu_hS6yfTcwccPF2T3_8kqGe59VxC2xjM03xQ/exec';
 
     // --- Translation Dictionary ---
     const translations = {
         bm: {
             genSubtext: "Lengkapkan butiran di bawah untuk menjana surat berhenti kerja rasmi secara automatik.",
+            labelPhone: "NO TELEFON",
+            placeholderPhone: "Contoh: 012-3456789",
+            labelEmail: "EMEL",
+            placeholderEmail: "Contoh: nama@email.com",
             labelName: "NAMA PENUH ANDA",
             placeholderName: "Contoh: Amir Bin Ahmad",
             labelPosition: "JAWATAN ANDA",
@@ -43,6 +60,15 @@ document.addEventListener('DOMContentLoaded', () => {
             placeholderCompany: "Contoh: ABC Sdn Bhd",
             labelRecipient: "NAMA PENERIMA (PENGURUS/HR)",
             placeholderRecipient: "Contoh: Encik Ali",
+            labelResume: "RESUME ANDA",
+            textDropzone: "Seret fail ke sini atau <b>pilih fail</b>",
+            textResumeHelper: "Resume anda bantu kami hasilkan surat yang lebih sesuai dengan tahap kerjaya anda.",
+            textResumeNote: "Sistem kami menyesuaikan gaya bahasa surat mengikut profil profesional anda.",
+            resumeError: "Sila muat naik resume sebelum jana surat berhenti kerja.",
+            errEmail: "Sila masukkan emel yang sah.",
+            errEmpty: "Sila lengkapkan semua butiran wajib.",
+            errResume: "Sila muat naik resume anda.",
+            errNotice: "Sila isi tempoh notis.",
             labelDate: "TARIKH SURAT",
             labelNotice: "TEMPOH NOTIS",
             optNotice0: "24 Jam",
@@ -70,6 +96,10 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         en: {
             genSubtext: "Complete the details below to automatically generate an official resignation letter.",
+            labelPhone: "PHONE NUMBER",
+            placeholderPhone: "Example: 012-3456789",
+            labelEmail: "EMAIL",
+            placeholderEmail: "Example: name@email.com",
             labelName: "YOUR FULL NAME",
             placeholderName: "Example: Amir Bin Ahmad",
             labelPosition: "YOUR POSITION",
@@ -78,6 +108,15 @@ document.addEventListener('DOMContentLoaded', () => {
             placeholderCompany: "Example: ABC Sdn Bhd",
             labelRecipient: "RECIPIENT NAME (MANAGER/HR)",
             placeholderRecipient: "Example: Mr. Ali",
+            labelResume: "YOUR RESUME",
+            textDropzone: "Drag fail here or <b>choose file</b>",
+            textResumeHelper: "Your resume helps us generate a letter that fits your career stage.",
+            textResumeNote: "Our system adapts the letter style based on your professional profile.",
+            resumeError: "Please upload your resume before generating the resignation letter.",
+            errEmail: "Please enter a valid email address.",
+            errEmpty: "Please complete all required fields.",
+            errResume: "Please upload your resume.",
+            errNotice: "Please fill the notice period.",
             labelDate: "DATE OF LETTER",
             labelNotice: "NOTICE PERIOD",
             optNotice0: "24 Hours",
@@ -128,6 +167,16 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('btnClearSig').innerText = t.btnClearSig;
         document.getElementById('helpSigUpload').innerText = t.helpSigUpload;
         document.getElementById('labelLang').innerText = t.labelLang;
+        document.getElementById('labelPhone').innerText = t.labelPhone;
+        document.getElementById('labelEmail').innerText = t.labelEmail;
+        document.getElementById('labelResume').innerText = t.labelResume;
+        document.getElementById('textDropzone').innerHTML = t.textDropzone;
+        document.getElementById('textResumeHelper').innerText = t.textResumeHelper;
+        document.getElementById('textResumeNote').innerText = t.textResumeNote;
+        document.getElementById('resumeError').innerText = t.resumeError;
+
+        document.getElementById('phone').placeholder = t.placeholderPhone;
+        document.getElementById('email').placeholder = t.placeholderEmail;
         document.getElementById('janaBtn').innerText = t.janaBtn;
 
         document.getElementById('name').placeholder = t.placeholderName;
@@ -229,6 +278,116 @@ document.addEventListener('DOMContentLoaded', () => {
         autoEndDateText.innerText = formattedEndDate;
         return { endDateObj, formattedEndDate };
     }
+
+    function showToast(message) {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+        
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<i class="ph ph-warning-circle"></i> <span>${message}</span>`;
+        
+        container.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.animation = 'toastOut 0.3s forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+    
+    function validateForm(showFeedback = false) {
+        const lang = languageInput.value;
+        const t = translations[lang];
+        
+        const requiredFields = [
+            'name', 'phone', 'email', 'position', 
+            'company', 'recipient', 'date'
+        ];
+        
+        let firstInvalid = null;
+        let allFilled = true;
+        
+        requiredFields.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el || el.value.trim() === "") {
+                allFilled = false;
+                if (showFeedback) {
+                    el.classList.add('invalid');
+                    if (!firstInvalid) firstInvalid = el;
+                }
+            } else {
+                el.classList.remove('invalid');
+            }
+        });
+
+        // Specific email validation
+        const emailValid = emailInput.value.trim() === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value);
+        if (showFeedback && emailInput.value && !emailValid) {
+            emailInput.classList.add('invalid');
+            if (!firstInvalid) firstInvalid = emailInput;
+        }
+        
+        // Notice validation
+        let noticeValid = noticeSelect.value !== "";
+        if (noticeSelect.value === 'custom' && !customNoticeInput.value.trim()) {
+            noticeValid = false;
+            if (showFeedback) {
+                customNoticeInput.classList.add('invalid');
+                if (!firstInvalid) firstInvalid = customNoticeInput;
+            }
+        }
+
+        // Resume validation
+        const resumeUploaded = resumeUploadedFile !== null;
+        if (showFeedback && !resumeUploaded) {
+            resumeDropzone.classList.add('invalid');
+            if (!firstInvalid) firstInvalid = resumeDropzone;
+        } else {
+            resumeDropzone.classList.remove('invalid');
+        }
+        
+        if (resumeUploaded) {
+            resumeError.style.display = 'none';
+        }
+
+        const isFormValid = allFilled && emailValid && noticeValid && resumeUploaded;
+        
+        if (showFeedback && !isFormValid) {
+            if (!emailValid) {
+                alert(t.errEmail);
+            } else if (!allFilled) {
+                showToast(t.errEmpty);
+            } else if (!resumeUploaded) {
+                showToast(t.errResume);
+            } else if (!noticeValid) {
+                showToast(t.errNotice);
+            }
+            
+            if (firstInvalid) {
+                firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        return isFormValid;
+    }
+
+    [
+        'name', 'phone', 'email', 'position', 
+        'company', 'recipient', 'date', 'notice', 'customNotice'
+    ].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', (e) => {
+                if (id === 'phone') {
+                    // Strips non-digit characters
+                    e.target.value = e.target.value.replace(/\D/g, '');
+                }
+                if (e.target.value.trim() !== "") e.target.classList.remove('invalid');
+                validateForm(false);
+            });
+            el.addEventListener('change', () => validateForm(false));
+        }
+    });
 
     [dateInput, noticeSelect, customNoticeInput, languageInput].forEach(el => {
         if (el) {
@@ -352,7 +511,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (clearBtn) {
         clearBtn.addEventListener('click', () => {
-            if (ctx && canvas) ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Re-calling resizeCanvas resets the canvas dimensions and clears the buffer
+            resizeCanvas();
             signatureImage = null;
         });
     }
@@ -368,22 +528,104 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Resume Upload Handlers ---
+    let resumeUploadedFile = null;
+
+    function handleFile(file) {
+        if (!file) return;
+
+        const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        const maxSize = 5 * 1024 * 1024; // 5MB
+
+        if (!allowedTypes.includes(file.type) && !file.name.match(/\.(pdf|doc|docx)$/i)) {
+            alert(languageInput.value === 'bm' ? 'Sila muat naik fail PDF, DOC atau DOCX sahaja.' : 'Please upload PDF, DOC or DOCX files only.');
+            return;
+        }
+
+        if (file.size > maxSize) {
+            alert(languageInput.value === 'bm' ? 'Saiz fail mestilah kurang daripada 5MB.' : 'File size must be less than 5MB.');
+            return;
+        }
+
+        resumeUploadedFile = file;
+        fileNameDisplay.innerText = file.name;
+        fileUploadStatus.style.display = 'flex';
+        
+        // Mocking a file object update for the input so validation picks it up
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        resumeFile.files = dataTransfer.files;
+        
+        resumeDropzone.classList.remove('invalid');
+        validateForm(false);
+    }
+
+    resumeDropzone.addEventListener('click', () => resumeFile.click());
+
+    resumeFile.addEventListener('change', (e) => {
+        handleFile(e.target.files[0]);
+    });
+
+    resumeDropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        resumeDropzone.classList.add('dragover');
+    });
+
+    resumeDropzone.addEventListener('dragleave', () => {
+        resumeDropzone.classList.remove('dragover');
+    });
+
+    resumeDropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        resumeDropzone.classList.remove('dragover');
+        handleFile(e.dataTransfer.files[0]);
+    });
+
+    removeFileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        resumeUploadedFile = null;
+        resumeFile.value = '';
+        fileUploadStatus.style.display = 'none';
+        validateForm(false);
+    });
+
     if (form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
+            
+            if (!validateForm(true)) {
+                return;
+            }
 
-            const name = document.getElementById('name').value;
-            const position = document.getElementById('position').value;
-            const company = document.getElementById('company').value;
-            const recipient = document.getElementById('recipient').value;
-            const dateStr = dateInput.value;
-            const lang = languageInput.value;
-            const reason = reasonInput.value;
+            const formData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                position: document.getElementById('position').value,
+                company: document.getElementById('company').value,
+                recipient: document.getElementById('recipient').value,
+                date: document.getElementById('date').value,
+                notice: document.getElementById('notice').value === 'custom' ? document.getElementById('customNotice').value : document.getElementById('notice').value,
+                reason: document.getElementById('reason').value,
+                language: document.getElementById('language').value
+            };
+
+            const name = formData.name;
+            const phone = formData.phone;
+            const position = formData.position;
+            const company = formData.company;
+            const recipient = formData.recipient;
+            const dateStr = formData.date;
+            const lang = formData.language;
+            const reason = formData.reason;
 
             const dateObj = new Date(dateStr);
+            const monthsBM = ['Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun', 'Julai', 'Ogos', 'September', 'Oktober', 'November', 'Disember'];
+            const monthsEN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            
             const formattedDate = lang === 'bm' 
-                ? `${dateObj.getDate()} ${monthsBM[dateObj.getMonth()]} ${dateObj.getFullYear()}`
-                : `${dateObj.getDate()} ${monthsEN[dateObj.getMonth()]} ${dateObj.getFullYear()}`;
+                ? (dateObj.getDate() ? `${dateObj.getDate()} ${monthsBM[dateObj.getMonth()]} ${dateObj.getFullYear()}` : "")
+                : (dateObj.getDate() ? `${dateObj.getDate()} ${monthsEN[dateObj.getMonth()]} ${dateObj.getFullYear()}` : "");
 
             const { formattedEndDate } = calculateEndDate();
 
@@ -395,65 +637,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let signatureMarkup = '';
             if (enableEsignCheckbox.checked && signatureImage) {
-                signatureMarkup = `<img src="${signatureImage}" class="signature-img" alt="Signature">`;
+                signatureMarkup = `<img src="${signatureImage}" class="signature-img" style="max-height: 80px; display: block; margin: 10px 0;" alt="Signature">`;
             } else {
                 signatureMarkup = `<div style="margin-top:20px; border-bottom: 1px dashed #000; width: 200px; height: 40px;"></div>`;
             }
 
-            let letterHTML = (lang === 'bm') ? `
-${formattedDate}
-
-${recipient}
-${company}
-
-Tuan/Puan,
-
-<b>NOTIS PELETAKAN JAWATAN</b>
-
-Dengan segala hormatnya, saya <b>${name}</b> yang memegang jawatan <b>${position}</b> di ${company}, dengan ini ingin memaklumkan hasrat saya untuk meletak jawatan daripada syarikat ini.
-
-Selaras dengan tempoh notis yang ditetapkan iaitu selama <b>${noticeText}</b>, hari terakhir saya bekerja adalah pada <b>${formattedEndDate}</b>. Penerimaan notis ini mengambil kira prosidural yang tertakluk kepada undang-undang syarikat.${reason ? ` Surat ini saya kemukakan atas sebab ${reason}.` : ''} Saya berhasrat untuk memastikan proses peralihan berjalan dengan lancar dan akan memberikan kerjasama sepenuhnya dalam urusan penyerahan tugas.
-
-Saya mengambil kesempatan ini untuk merakamkan setinggi-tinggi penghargaan kepada pihak pengurusan dan rakan-rakan sekerja atas segala bimbingan, sokongan, dan pengalaman berharga yang telah diberikan sepanjang tempoh perkhidmatan saya.
-
-Sekian, terima kasih.
-
-
-Yang ikhlas,
-
-
+            const letterHTML = (lang === 'bm') ? 
+`<div class="letter-content" style="color: #2c3e50 !important; display: block !important;">
+<p style="margin-bottom: 0.8rem;">Tarikh: ${formattedDate}</p>
+<p style="margin-bottom: 0.8rem;">Kepada,<br>${recipient}<br>${company}</p>
+<p style="margin-bottom: 0.8rem;">Tuan/Puan,</p>
+<p style="margin-bottom: 1rem; border-bottom: 1.5px solid #2c3e50; display: inline-block;"><b>NOTIS PELETAKAN JAWATAN</b></p>
+<p style="margin-bottom: 0.8rem;">Dengan segala hormatnya, saya <b>${name}</b> yang memegang jawatan <b>${position}</b> di ${company}, dengan ini ingin memaklumkan hasrat saya untuk meletak jawatan daripada syarikat ini.</p>
+<p style="margin-bottom: 0.8rem;">Selaras dengan tempoh notis yang ditetapkan iaitu selama <b>${noticeText}</b>, hari terakhir saya bekerja adalah pada <b>${formattedEndDate}</b>. Penerimaan notis ini mengambil kira prosidural yang tertakluk kepada undang-undang syarikat.${reason ? ` Surat ini saya kemukakan atas sebab ${reason}.` : ''} Saya berhasrat untuk memastikan proses peralihan berjalan dengan lancar dan akan memberikan kerjasama sepenuhnya dalam urusan penyerahan tugas.</p>
+<p style="margin-bottom: 0.8rem;">Saya mengambil kesempatan ini untuk merakamkan setinggi-tinggi penghargaan kepada pihak pengurusan dan rakan-rakan sekerja atas segala bimbingan, sokongan, dan pengalaman berharga yang telah diberikan sepanjang tempoh perkhidmatan saya.</p>
+<p style="margin-bottom: 0.8rem;">Sekian, terima kasih.</p>
+<p style="margin-bottom: 0.3rem;">Yang ikhlas,</p>
+<div class="signature-block">
 ${signatureMarkup}
-<b>${name}</b>
-${position}
-            ` : `
-${formattedDate}
-
-${recipient}
-${company}
-
-Dear Sir/Madam,
-
-<b>NOTICE OF RESIGNATION</b>
-
-Please accept this letter as formal notification of my intention to resign from my position as <b>${position}</b> at ${company}.
-
-In accordance with my notice period of <b>${noticeText}</b>, my final day will be <b>${formattedEndDate}</b>.${reason ? ` My departure is due to ${reason}.` : ''} I wish to ensure a smooth transition during this period and will fully cooperate with the handover of my duties and responsibilities.
-
-I would like to take this opportunity to express my sincere gratitude to the management and my colleagues for the guidance, support, and invaluable experience I have gained during my time with the company.
-
-Thank you.
-
-
-Sincerely,
-
-
+<p style="margin-top: 0.5rem;"><b>${name}</b><br>${position}<br>${phone}</p>
+</div>
+</div>` : 
+`<div class="letter-content" style="color: #2c3e50 !important; display: block !important;">
+<p style="margin-bottom: 0.8rem;">Date: ${formattedDate}</p>
+<p style="margin-bottom: 0.8rem;">To,<br>${recipient}<br>${company}</p>
+<p style="margin-bottom: 0.8rem;">Dear Sir/Madam,</p>
+<p style="margin-bottom: 1rem; border-bottom: 1.5px solid #2c3e50; display: inline-block;"><b>NOTICE OF RESIGNATION</b></p>
+<p style="margin-bottom: 0.8rem;">Please accept this letter as formal notification of my intention to resign from my position as <b>${position}</b> at ${company}.</p>
+<p style="margin-bottom: 0.8rem;">In accordance with my notice period of <b>${noticeText}</b>, my final day will be <b>${formattedEndDate}</b>.${reason ? ` My departure is due to ${reason}.` : ''} I wish to ensure a smooth transition during this period and will fully cooperate with the handover of my duties and responsibilities.</p>
+<p style="margin-bottom: 0.8rem;">I would like to take this opportunity to express my sincere gratitude to the management and my colleagues for the guidance, support, and invaluable experience I have gained during my time with the company.</p>
+<p style="margin-bottom: 0.8rem;">Thank you.</p>
+<p style="margin-bottom: 0.3rem;">Sincerely,</p>
+<div class="signature-block">
 ${signatureMarkup}
-<b>${name}</b>
-${position}
-            `;
+<p style="margin-top: 0.5rem;"><b>${name}</b><br>${position}<br>${phone}</p>
+</div>
+</div>`;
 
-            letterOutput.innerHTML = letterHTML.trim();
+            letterOutput.innerHTML = letterHTML;
             if(window.innerWidth <= 900) letterOutput.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // --- Background Data Submission ---
+            try {
+                fetch(scriptURL, { 
+                    method: 'POST', 
+                    mode: 'no-cors', 
+                    body: JSON.stringify(formData) 
+                });
+            } catch (err) {}
         });
     }
 
@@ -474,13 +705,27 @@ ${position}
 
     if (downloadPdfBtn) {
         downloadPdfBtn.addEventListener('click', () => {
-            if (letterOutput.innerText.includes('Sila isi borang') || letterOutput.innerText.includes('Please fill')) {
+            const letterContent = document.querySelector('.letter-content');
+            if (!letterContent) {
                 alert(languageInput.value === 'bm' ? 'Sila jana surat terlebih dahulu.' : 'Please generate the letter first.');
                 return;
             }
 
-            // Simple native browser print dialog (User chooses 'Save as PDF')
-            window.print();
+            const printBuffer = document.getElementById('printBuffer');
+            
+            // Clone the letter content and clean it up for printing
+            const clone = letterContent.cloneNode(true);
+            
+            // Clear buffer and append clone
+            printBuffer.innerHTML = '';
+            printBuffer.appendChild(clone);
+
+            // Trigger print with a small delay for safety
+            setTimeout(() => {
+                window.print();
+                // Clean up buffer after print dialog closes
+                printBuffer.innerHTML = '';
+            }, 300);
         });
     }
 

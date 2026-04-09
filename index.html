@@ -67,16 +67,26 @@
 
             <div class="generator-layout">
                 <div class="form-section">
-                    <form id="letterForm">
+                    <form id="letterForm" novalidate>
                         <div class="form-row">
                             <div class="form-group">
                                 <label id="labelName" for="name">NAMA PENUH ANDA</label>
                                 <input type="text" id="name" placeholder="Contoh: Amir Bin Ahmad" required>
                             </div>
                             <div class="form-group">
-                                <label id="labelPosition" for="position">JAWATAN ANDA</label>
-                                <input type="text" id="position" placeholder="Contoh: Marketing Executive" required>
+                                <label id="labelPhone" for="phone">NO TELEFON</label>
+                                <input type="tel" id="phone" inputmode="numeric" placeholder="Contoh: 012-3456789" required>
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label id="labelEmail" for="email">EMEL</label>
+                            <input type="email" id="email" placeholder="Contoh: nama@email.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label id="labelPosition" for="position">JAWATAN ANDA</label>
+                            <input type="text" id="position" placeholder="Contoh: Marketing Executive" required>
                         </div>
 
                         <div class="form-group">
@@ -155,6 +165,28 @@
                                     <p id="helpSigUpload" class="help-text">Sila muat naik fail PNG telus untuk hasil terbaik.</p>
                                 </div>
                             </div>
+                        <!-- Resume Upload Section (Mandatory) -->
+                        <div class="form-group resume-section">
+                            <label id="labelResume">RESUME ANDA</label>
+                            <div class="resume-upload-zone" id="resumeDropzone">
+                                <i class="ph ph-clip-light"></i>
+                                <div class="upload-text">
+                                    <span id="textDropzone">Seret fail ke sini atau <b>pilih fail</b></span>
+                                    <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" hidden>
+                                </div>
+                                <p id="textResumeHelper" class="resume-helper">Resume anda bantu kami hasilkan surat yang lebih sesuai dengan tahap kerjaya anda.</p>
+                                <div class="resume-note">
+                                    <i class="ph ph-info"></i>
+                                    <span id="textResumeNote">Sistem kami menyesuaikan gaya bahasa surat mengikut profil profesional anda.</span>
+                                </div>
+                                
+                                <div id="fileUploadStatus" class="file-status" style="display: none;">
+                                    <i class="ph-fill ph-file-pdf"></i>
+                                    <span id="fileName">Nama Fail.pdf</span>
+                                    <button type="button" id="removeFile" class="remove-file-btn"><i class="ph ph-x"></i></button>
+                                </div>
+                            </div>
+                            <p id="resumeError" class="error-msg" style="display: none;">Sila muat naik resume sebelum jana surat berhenti kerja.</p>
                         </div>
 
                         <div class="form-group">
@@ -172,7 +204,7 @@
 
                 <div class="preview-section" id="previewContainer">
                     <div class="paper-preview" id="letterOutput">
-                        <p class="placeholder-text">Sila isi borang di sebelah, kemudian klik "Jana Sekarang" untuk melihat templat surat berhenti kerja anda di sini.</p>
+                        <p class="placeholder-text">Sila isi maklumat terlebih dahulu, kemudian klik "Jana Sekarang" untuk melihat templat surat berhenti kerja anda di sini.</p>
                     </div>
                     
                     <div class="action-buttons">
@@ -220,8 +252,8 @@
                         <i class="ph ph-copy"></i>
                     </div>
                     <div class="step-badge">3</div>
-                    <h3>Jana & Gunakan Surat</h3>
-                    <p>Tekan "Jana Sekarang", semak preview pada kotak di sebelah, kemudian klik "Salin Surat". Paste pada dokumen perisian (Word) atau lampiran email anda!</p>
+                    <h3>Jana & Muat Turun PDF</h3>
+                    <p>Tekan "Jana Sekarang" dan semak preview surat tersebut. Kemudian, klik "Salin Surat" atau "Muat Turun PDF" jika anda ingin memuat turun dan mencetak surat tersebut.</p>
                 </div>
             </div>
         </div>
@@ -231,28 +263,28 @@
     <section class="features-section">
         <div class="container">
             <div class="section-title">
-                <h2>Kenapa Guna Website <span class="text-primary">Ini?</span></h2>
-                <p>Dicipta untuk memudahkan urusan pekerja, kami tawarkan nilai terbaik untuk anda.</p>
+                <h2><span class="text-primary">6 Kelebihan</span> Penjana Surat Berhenti Kerja Kami</h2>
+                <p>Cara paling mudah dan pantas untuk sediakan surat berhenti kerja tanpa perlu pening fikir ayat.</p>
             </div>
 
             <div class="features-grid">
                 <div class="feature-item">
-                    <i class="ph-fill ph-check-circle"></i> Percuma sepenuhnya
+                    <i class="ph-fill ph-check-circle"></i> 100% percuma & pantas
                 </div>
                 <div class="feature-item">
-                    <i class="ph-fill ph-check-circle"></i> Dalam BM & Inggeris
+                    <i class="ph-fill ph-check-circle"></i> Dwi-bahasa (BM & BI)
                 </div>
                 <div class="feature-item">
-                    <i class="ph-fill ph-check-circle"></i> Siap dalam masa 5 saat sahaja
+                    <i class="ph-fill ph-check-circle"></i> Format profesional & rasmi
                 </div>
                 <div class="feature-item">
-                    <i class="ph-fill ph-check-circle"></i> Sesuai semua industri
+                    <i class="ph-fill ph-check-circle"></i> Sesuai untuk semua jawatan
+                </div>
+                <div class="feature-item">
+                    <i class="ph-fill ph-check-circle"></i> Sedia dimuat turun & cetak
                 </div>
                 <div class="feature-item">
                     <i class="ph-fill ph-check-circle"></i> Tak perlu daftar akaun
-                </div>
-                <div class="feature-item">
-                    <i class="ph-fill ph-check-circle"></i> Tiada pangkalan data disimpan
                 </div>
             </div>
         </div>
@@ -262,58 +294,58 @@
     <section class="faq-section" id="faq">
         <div class="container">
             <div class="section-title">
-                <h2>Soalan Lazim <span class="text-primary">Pengguna</span></h2>
+                <h2><span class="text-primary">Soalan Lazim</span> Pengguna</h2>
                 <p>Segala persoalan mengenai proses berhenti kerja terjawab di sini.</p>
             </div>
 
             <div class="faq-container">
                 <div class="faq-item">
                     <button class="faq-question">
-                        <span>Berapa lama notis berhenti kerja yang saya kena bagi?</span>
+                        <span>1. Adakah surat ini mengikut format rasmi HR?</span>
                         <i class="ph ph-caret-down"></i>
                     </button>
                     <div class="faq-answer">
-                        Tempoh notis berhenti kerja anda bergantung kepada apa yang tertulis dalam kontrak perkhidmatan anda. Jika kontrak tidak menyatakan tempoh notis, anda perlu mengikut tempoh minimum yang ditetapkan di bawah Akta Kerja 1955 berdasarkan tempoh anda telah bekerja.
+                        Ya. Format yang dijana telah disusun mengikut piawaian profesional dan tatabahasa yang betul, sesuai untuk kegunaan mana-mana syarikat atau organisasi di Malaysia.
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-question">
-                        <span>Adakah saya wajib nyatakan sebab berhenti kerja?</span>
+                        <span>2. Bolehkah saya muat turun surat ini dalam format PDF?</span>
                         <i class="ph ph-caret-down"></i>
                     </button>
                     <div class="faq-answer">
-                        Secara undang-undang di bawah Akta Kerja 1955, anda tidak wajib menyatakan sebab berhenti kerja dalam surat rasmi. Berhenti kerja adalah hak anda sebagai pekerja asalkan anda mematuhi tempoh notis yang ditetapkan dalam kontrak.
+                        Ya. Selepas anda klik "Jana Sekarang", anda boleh memuat turun surat tersebut terus ke dalam format PDF dan sedia untuk dicetak (print-ready).
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-question">
-                        <span>Boleh ke edit surat selepas jana?</span>
+                        <span>3. Adakah perkhidmatan penjana surat berhenti kerja ini percuma?</span>
                         <i class="ph ph-caret-down"></i>
                     </button>
                     <div class="faq-answer">
-                        Ya. Salin teks ke Microsoft Word, Google Docs, atau mana-mana editor dan edit mengikut keperluan anda sebelum menghantarnya.
+                        Ya, 100% percuma. Anda boleh menjana, menyalin dan memuat turun seberapa banyak surat yang anda perlukan tanpa sebarang kos atau pendaftaran akaun.
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-question">
-                        <span>Surat ini sah secara undang-undang?</span>
+                        <span>4. Bagaimana jika saya mahu tukar tempoh notis?</span>
                         <i class="ph ph-caret-down"></i>
                     </button>
                     <div class="faq-answer">
-                        Surat yang dijana adalah template profesional yang standard. Untuk keperluan undang-undang khusus, sila dapatkan nasihat daripada peguam atau pakar buruh yang berkelayakan.
+                        Anda hanya perlu memilih atau memasukkan tempoh notis yang dikehendaki (seperti 24 jam, 2 minggu atau sebulan) dalam ruangan yang disediakan sebelum menekan butang "Jana Sekarang".
                     </div>
                 </div>
 
                 <div class="faq-item">
                     <button class="faq-question">
-                        <span>Adakah maklumat saya disimpan?</span>
+                        <span>5. Bolehkah saya guna penjana ini melalui telefon bimbit?</span>
                         <i class="ph ph-caret-down"></i>
                     </button>
                     <div class="faq-answer">
-                        Tidak. Semua maklumat yang anda masukkan hanya diproses pada masa jana dan tidak disimpan dalam sebarang pangkalan data.
+                        Tentu sahaja. Laman web kami mesra peranti mudah alih (mobile friendly), memudahkan anda untuk menjana dan memuat turun surat berhenti kerja di mana-mana sahaja secara pantas.
                     </div>
                 </div>
             </div>
@@ -335,6 +367,12 @@
             <p>&copy; 2026 Surat Berhenti Kerja | Dicipta oleh Maukerja</p>
         </div>
     </footer>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <!-- Hidden container for printing only the letter -->
+    <div id="printBuffer" style="display: none;"></div>
 
     <script src="script.js"></script>
 </body>
