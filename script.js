@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
             labelRecipient: "NAMA PENERIMA (PENGURUS/HR)",
             placeholderRecipient: "Contoh: Encik Ali",
             labelResume: "RESUME ANDA",
-            textDropzone: "Seret fail ke sini atau <b>pilih fail</b>",
+            textDropzone: "Seret fail resume ke sini atau <b>pilih fail resume</b>.",
             textResumeHelper: "Resume anda bantu kami hasilkan surat yang lebih sesuai dengan tahap kerjaya anda.",
             textResumeNote: "Sistem kami menyesuaikan gaya bahasa surat mengikut profil profesional anda.",
             resumeError: "Sila muat naik resume sebelum jana surat berhenti kerja.",
