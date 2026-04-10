@@ -925,67 +925,43 @@ footer {
 
 /* --- PRINT STYLES --- */
 @media print {
-    /* Remove default browser headers and footers */
+    /* Basic print resets for the main page */
     @page {
-        margin: 0;
+        margin: 1cm;
+        size: auto;
     }
 
-    /* Hide everything except the print buffer */
-    body > *:not(#printBuffer) {
+    /* Hide non-essential UI if user manually prints the page (CMD+P) */
+    header, footer, .hero-section, .guide-section, .features-section, .faq-section, .action-buttons, .form-section {
         display: none !important;
     }
 
-    /* Reset body and html for full-page printing */
     body, html {
         background: #fff !important;
         margin: 0 !important;
         padding: 0 !important;
+    }
+
+    .container {
         width: 100% !important;
-        height: auto !important;
-    }
-
-    /* Show and style the print buffer */
-    #printBuffer {
-        display: block !important;
-        width: 100% !important;
-        height: auto !important;
-        padding: 2cm !important; /* Standard A4 professional margins */
-        background: #fff !important;
-        color: #000 !important;
-        font-family: 'Outfit', sans-serif !important;
-    }
-
-    /* Clean letter-specific styles inside the buffer */
-    .letter-content {
-        color: #000 !important;
-        font-size: 11pt !important;
-        line-height: 1.6 !important;
-        white-space: normal !important;
-        display: block !important;
-    }
-
-    .letter-content p {
-        margin-bottom: 0.8rem !important;
-    }
-
-    .signature-block {
-        margin-top: 1.5rem !important;
-    }
-
-    .signature-img {
-        max-width: 150px !important;
-        height: auto !important;
-        display: block !important;
-        margin-top: 10px !important;
-    }
-
-    /* Ensure paper-like look is removed for actual printers */
-    .paper-preview {
+        max-width: none !important;
+        margin: 0 !important;
         padding: 0 !important;
+    }
+
+    .generator-section {
+        padding: 0 !important;
+    }
+
+    #previewContainer {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    .paper-preview {
         box-shadow: none !important;
         border: none !important;
-        width: 100% !important;
-        background: transparent !important;
+        padding: 0 !important;
     }
 }
 

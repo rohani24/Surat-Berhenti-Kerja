@@ -711,21 +711,84 @@ ${signatureMarkup}
                 return;
             }
 
-            const printBuffer = document.getElementById('printBuffer');
-            
-            // Clone the letter content and clean it up for printing
-            const clone = letterContent.cloneNode(true);
-            
-            // Clear buffer and append clone
-            printBuffer.innerHTML = '';
-            printBuffer.appendChild(clone);
+            // Create a temporary window/tab for printing
+            const printWindow = window.open('', '_blank');
+            if (!printWindow) {
+                alert(languageInput.value === 'bm' ? 'Sila benarkan popup untuk memuat turun PDF.' : 'Please allow popups to download the PDF.');
+                return;
+            }
 
-            // Trigger print with a small delay for safety
-            setTimeout(() => {
-                window.print();
-                // Clean up buffer after print dialog closes
-                printBuffer.innerHTML = '';
-            }, 300);
+            // Extract styles to ensure the printed version matches the preview precisely
+            const styles = `
+                @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+                @page { margin: 1.5cm 2cm; size: A4 portrait; }
+                body { 
+                    font-family: 'Outfit', sans-serif; 
+                    line-height: 1.6; 
+                    color: #000; 
+                    margin: 0; 
+                    padding: 0; 
+                }
+                .letter-content { 
+                    width: 100%; 
+                    font-size: 11pt; 
+                    white-space: normal;
+                }
+                .letter-content p { margin-bottom: 0.8rem; }
+                .signature-block { margin-top: 1.5rem; }
+                .signature-img { 
+                    max-width: 150px; 
+                    height: auto; 
+                    display: block; 
+                    margin-top: 10px; 
+                }
+                @media print {
+                    body { -webkit-print-color-adjust: exact; }
+                }
+            `;
+
+            // Prepare the HTML content for the new window
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>${languageInput.value === 'bm' ? 'Surat Berhenti Kerja' : 'Resignation Letter'}</title>
+                    <style>${styles}</style>
+                </head>
+                <body>
+                    <div class="letter-content">
+                        ${letterContent.innerHTML}
+                    </div>
+                </body>
+                </html>
+            `);
+
+            printWindow.document.close();
+
+            // Handle images (like signature) loading before triggers
+            const images = printWindow.document.getElementsByTagName('img');
+            if (images.length > 0) {
+                let loadedCount = 0;
+                Array.from(images).forEach(img => {
+                    img.onload = () => {
+                        loadedCount++;
+                        if (loadedCount === images.length) {
+                            setTimeout(() => {
+                                printWindow.print();
+                                printWindow.close();
+                            }, 500);
+                        }
+                    };
+                    // Handle cached images
+                    if (img.complete) img.onload();
+                });
+            } else {
+                // No images, print immediately after a small render delay
+                setTimeout(() => {
+                    printWindow.print();
+                    printWindow.close();
+                }, 500);
+            }
         });
     }
 
